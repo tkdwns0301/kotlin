@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     private val runButton: Button by lazy {
         findViewById<Button>(R.id.runButton)
     }
-    private val numberPicker: NumberPicker by lazy { 
+    private val numberPicker: NumberPicker by lazy {
         findViewById<NumberPicker>(R.id.numberPicker)
     }
     private val numberTextViewList: List<TextView> by lazy {
