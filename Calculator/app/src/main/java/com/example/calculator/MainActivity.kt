@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -184,12 +185,18 @@ class MainActivity : AppCompatActivity() {
         historyLinearLayout.removeAllViews()
 
         //TODO 디비에서 모든 기록 가져오기
+        //TODO 뷰에서 모든 기록 할당하기
         Thread(Runnable {
             db.historyDao().getAll().reversed().forEach {
+                runOnUiThread {
+                    val historyView = LayoutInflater.from(this).inflate(R.layout.history_row, null, false)
+                    historyView.findViewById<TextView>(R.id.tvExpression).text = it.expression
+                    historyView.findViewById<TextView>(R.id.tvResult).text = "= ${it.result}"
 
+                    historyLinearLayout.addView(historyView)
+                }
             }
         }).start()
-        //TODO 뷰에서 모든 기록 할당하기
 
 
     }
