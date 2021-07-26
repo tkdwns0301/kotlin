@@ -6,9 +6,12 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.room.Room
+import com.example.calculator.model.History
 import java.lang.NumberFormatException
 
 class MainActivity : AppCompatActivity() {
@@ -26,15 +29,21 @@ class MainActivity : AppCompatActivity() {
     private val historyLayout: View by lazy {
         findViewById(R.id.historyLayout)
     }
-    private val historyLinearLayout: View by lazy {
+    private val historyLinearLayout: LinearLayout by lazy {
         findViewById(R.id.historyLinearLayout)
     }
 
-
+    lateinit var db: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java,
+            "historyDB"
+        ).build()
     }
 
     fun buttonClicked(v: View) {
@@ -128,6 +137,11 @@ class MainActivity : AppCompatActivity() {
         val expressionText = tvExpression.text.toString()
         val resultText = calculateExpression()
 
+        //TODO 디비에 넣어주는 부분
+        Thread(Runnable {
+            db.historyDao().insertHistory(History(null, expressionText, resultText))
+        }).start()
+
         tvResult.text = ""
         tvExpression.text = resultText
 
@@ -167,8 +181,14 @@ class MainActivity : AppCompatActivity() {
 
     fun historyButtonClicked(v: View) {
         historyLayout.isVisible = true
+        historyLinearLayout.removeAllViews()
 
         //TODO 디비에서 모든 기록 가져오기
+        Thread(Runnable {
+            db.historyDao().getAll().reversed().forEach {
+
+            }
+        }).start()
         //TODO 뷰에서 모든 기록 할당하기
 
 
