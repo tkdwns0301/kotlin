@@ -119,6 +119,10 @@ class MainActivity : AppCompatActivity() {
 
                 if (selectedImageUri != null) {
                     //TODO 사진을 가져온 경우
+                    if (imageUriList.size > 6) {
+                        Toast.makeText(this, "이미 사진은 꽉 찼습니다.", Toast.LENGTH_SHORT).show() 
+                        return
+                    }
                     imageUriList.add(selectedImageUri)
                     imageViewList[imageUriList.size - 1].setImageURI(selectedImageUri)
                 } else {
